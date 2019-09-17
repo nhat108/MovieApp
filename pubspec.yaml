@@ -1,0 +1,49 @@
+name: nux_movie
+description: A new Flutter project.
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.2.2 <3.0.0"
+
+dependencies:
+  app_settings: ^1.0.6+2 #opening iOS and Android phone settings from an app.
+  url_launcher: ^5.0.5
+  video_player: ^0.5.1 #video player network
+  firebase_auth: ^0.14.0
+  cloud_firestore: ^0.12.9
+  firebase_database: ^3.0.5
+  firebase_core: ^0.4.0+8
+  provider: ^3.0.0+1 #provider
+  
+  youtube_player_flutter: ^4.1.0
+  connectivity: ^0.4.3+7
+  cached_network_image: ^1.1.1
+  flutter_image: ^2.0.0
+  flutter_svg: ^0.14.0
+  rxdart: ^0.22.1+1
+  http: ^0.12.0+2
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^0.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+flutter:
+  assets:
+    - assets/images/
+    - assets/svg/
+  uses-material-design: true
+  fonts:
+    - family: Kiss
+      fonts:
+        - asset: fonts/QuickKiss.ttf
+    - family: Painter
+      fonts:
+        - asset: fonts/painter.ttf
+    - family: Aller
+      fonts:
+        - asset: fonts/Aller_Rg.ttf
+    - family: ChunkFive
+      fonts:
+        - asset: fonts/ChunkFive-Regular.otf
