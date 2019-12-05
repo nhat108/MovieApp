@@ -9,6 +9,7 @@ import 'package:nux_movie/src/widgets/cast_list.dart';
 import 'package:nux_movie/src/widgets/image_widget.dart';
 import 'package:nux_movie/src/widgets/recommendations_list.dart';
 import 'package:nux_movie/src/widgets/reviews.dart';
+import 'package:nux_movie/src/widgets/waiting_widget.dart';
 import '../blocs/movies_bloc.dart';
 import '../utils/colors.dart';
 
@@ -76,11 +77,20 @@ class _MovieDetailState extends State<MovieDetail> {
   _getToolbar(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-      child: IconButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        icon: Icon(Icons.arrow_back_ios),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back_ios),
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.favorite_border),
+          )
+        ],
       ),
     );
   }
@@ -143,7 +153,7 @@ class _MovieDetailState extends State<MovieDetail> {
                                           MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
                                         Text('${widget.result.voteAverage}'),
-                                        _getTrailerButton(),
+                                        _buildTrailerButton(),
                                       ],
                                     ),
                                   )
@@ -186,7 +196,7 @@ class _MovieDetailState extends State<MovieDetail> {
           padding: EdgeInsets.all(10),
           margin: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
           decoration: BoxDecoration(
-              color:Color(MovieColor.kPrimaryColor),
+              color: Color(MovieColor.kPrimaryColor),
               borderRadius: BorderRadius.circular(5.0)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -212,23 +222,12 @@ class _MovieDetailState extends State<MovieDetail> {
               StreamBuilder(
                 stream: bloc.casts,
                 builder: (context, AsyncSnapshot<Credits> snapshot) {
-                  if (snapshot.hasData) 
+                  if (snapshot.hasData)
                     return CastList(
                       casts: snapshot.data.cast,
                     );
                   if (snapshot.connectionState == ConnectionState.waiting)
-                    return Center(
-                      child: Container(
-                          padding: EdgeInsets.all(5),
-                          width: 50,
-                          height: 50,
-                          child: CircularProgressIndicator()),
-                    );
-
-                  if (snapshot.hasError)
-                    return Center(
-                      child: Icon(Icons.error),
-                    );
+                    return WaitingWidget();
                   return Container();
                 },
               ),
@@ -246,20 +245,9 @@ class _MovieDetailState extends State<MovieDetail> {
                     return RecommendationsList(
                       results: snapshot.data.results,
                     );
-                  } else if (snapshot.hasError) {
-                    return Center(
-                      child: Icon(Icons.error),
-                    );
-                  } else if (snapshot.connectionState ==
-                      ConnectionState.waiting) {
-                    return Center(
-                      child: Container(
-                          padding: EdgeInsets.all(5),
-                          width: 50,
-                          height: 50,
-                          child: CircularProgressIndicator()),
-                    );
                   }
+                  if (snapshot.connectionState == ConnectionState.waiting)
+                    return WaitingWidget();
                   return Container();
                 },
               ),
@@ -355,7 +343,7 @@ class _MovieDetailState extends State<MovieDetail> {
     );
   }
 
-  _getTrailerButton() => StreamBuilder<MovieTrailer>(
+  _buildTrailerButton() => StreamBuilder<MovieTrailer>(
         stream: bloc.movieTrailer,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
@@ -370,7 +358,7 @@ class _MovieDetailState extends State<MovieDetail> {
                           borderRadius: BorderRadius.circular(8)),
                       child: IconButton(
                         onPressed: () {
-                          openPlayVideoScreen(path: trailers[0].key);
+                          _navigatePlayVideoScreen(path: trailers[0].key);
                         },
                         color: Colors.blue,
                         icon: Text('Video'),
@@ -405,12 +393,12 @@ class _MovieDetailState extends State<MovieDetail> {
       initialValue: 0,
       onSelected: (value) {
         String path = trailers[value].key;
-        openPlayVideoScreen(path: path);
+        _navigatePlayVideoScreen(path: path);
       },
     );
   }
 
-  openPlayVideoScreen({String path}) {
+  _navigatePlayVideoScreen({String path}) {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return PlayVideoScreen(path: path);
     }));

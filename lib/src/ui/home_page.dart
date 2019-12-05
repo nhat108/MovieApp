@@ -20,29 +20,29 @@ class _HomePageState extends State<HomePage> {
   // StreamSubscription _connectionChangeStream;
   bool isOnline = false;
   int _selectedIndex = 0;
-  static final _moviePage = MoviesPage(
-    key: PageStorageKey('Page1'),
-  );
-  static final _playingPage = ReviewPage(
-    key: PageStorageKey('Page2'),
-  );
-  static final _funPage = FunPage(
-    key: PageStorageKey('Page3'),
-  );
-  static final _aboutPage = AboutPage(
-    key: PageStorageKey('Page4'),
-  );
-  List<Widget> pages = [
-    _moviePage,
-    _playingPage,
-    _funPage,
-    _aboutPage,
-  ];
+  // static final _moviePage = MoviesPage(
+  //   key: PageStorageKey('Page1'),
+  // );
+  // static final _playingPage = ReviewPage(
+  //   key: PageStorageKey('Page2'),
+  // );
+  // static final _funPage = FunPage(
+  //   key: PageStorageKey('Page3'),
+  // );
+  // static final _aboutPage = AboutPage(
+  //   key: PageStorageKey('Page4'),
+  // );
+  List<Widget> pages = List<Widget>();
+
   final PageStorageBucket bucket = PageStorageBucket();
   StreamSubscription connection;
   @override
   void initState() {
     super.initState();
+  pages.add(MoviesPage());
+  pages.add(ReviewPage());
+  pages.add(FunPage());
+  pages.add(AboutPage());
     connection = Connectivity().onConnectivityChanged.listen((onData) {
       if (onData == ConnectivityResult.mobile ||
           onData == ConnectivityResult.wifi) {
@@ -61,19 +61,19 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    super.dispose();
-    bloc.dispose();
     connection.cancel();
+    bloc.disposeAll();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
       return Scaffold(
         bottomNavigationBar: _bottomNavigationBar(_selectedIndex),
-        body:isOnline? PageStorage(
-          child: pages[_selectedIndex],
-          bucket: bucket,
-        ):OffLineWidget()
+        body:isOnline? IndexedStack(
+          children: pages,
+          index: _selectedIndex,
+        ):OfflineWidget()
       );
   }
 

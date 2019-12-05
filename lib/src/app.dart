@@ -14,7 +14,10 @@ class App extends StatelessWidget{
         '/Movie Lines':(context)=>LinePage(),
       },
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark(),
+      theme: ThemeData.dark().copyWith(
+        platform: TargetPlatform.iOS
+      ),
+      
       home: HomePage()
     );
   }

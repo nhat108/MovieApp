@@ -1,12 +1,12 @@
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 
-class OffLineWidget extends StatefulWidget {
+class OfflineWidget extends StatefulWidget {
   @override
-  _OffLineWidgetState createState() => _OffLineWidgetState();
+  _OfflineWidgetState createState() => _OfflineWidgetState();
 }
 
-class _OffLineWidgetState extends State<OffLineWidget> {
+class _OfflineWidgetState extends State<OfflineWidget> {
   
   
   @override

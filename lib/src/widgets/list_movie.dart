@@ -16,42 +16,39 @@ class ListMovie extends StatefulWidget {
 class ListMovieState extends State<ListMovie> {
   @override
   Widget build(BuildContext context) {
-    return Opacity(
-      opacity: 0.8,
-      child: Container(
-        // padding: EdgeInsets.only(top: 3),
-        height: 280,
-         padding: EdgeInsets.symmetric(horizontal: 20),
-        // margin: EdgeInsets.only(top:20),
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: widget.results.length,
-          itemBuilder: (context, i) {
-            String tag='${widget.kind}+${widget.results[i].id}';
-            return Hero(
-              tag: tag,
-              child: getItemList(
-                result: widget.results[i],
-                tag: tag
-              ),
-            );
-          },
-        ),
+    return Container(
+      height: 280,
+       padding: EdgeInsets.symmetric(horizontal: 20),
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: widget.results.length,
+        itemBuilder: (context, i) {
+          String tag='${widget.kind}+${widget.results[i].id}';
+          return Hero(
+            tag: tag,
+            child: _item(
+              result: widget.results[i],
+              tag: tag
+            ),
+          );
+        },
       ),
     );
   }
-
-  Widget getItemList({Result result,String tag}) {
+  _navigateToMovieDetailPage({Result result, String heroTag}) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => MovieDetail(
+                result: result,
+                heroTag: heroTag,
+              )),
+    );
+  }
+  Widget _item({Result result,String tag}) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => MovieDetail(
-                    result: result,
-                    heroTag: tag,
-                  )),
-        );
+        _navigateToMovieDetailPage(result: result,heroTag: tag);
       },
       child: Container(
         key: Key('{$result.id}'),

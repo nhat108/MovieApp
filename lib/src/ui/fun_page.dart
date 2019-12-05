@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nux_movie/src/models/db.dart';
 import 'package:nux_movie/src/utils/colors.dart';
 
 class FunPage extends StatefulWidget {
@@ -27,7 +26,8 @@ class _FunPageState extends State<FunPage> {
       backgroundColor: Color(MovieColor.kPrimaryColor),
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.only(top: 20,bottom: 20),
+          height: MediaQuery.of(context).size.height,
+          // padding: EdgeInsets.only(top: 20,bottom: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,

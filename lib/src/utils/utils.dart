@@ -23,7 +23,7 @@ class Utils {
     37: 'Western'
   };
   
-  static String getGenres(int id) {
+  static String listOfGenres(int id) {
     String genres = genresMap[id];
     if (genres != null) {
       return genres;
@@ -36,9 +36,9 @@ class Utils {
     String genres = '';
     for (int i = 0; i <= ids.length - 1; i++) {
       if (i == ids.length - 1) {
-        genres += Utils.getGenres(ids[i]) + '.';
+        genres += Utils.listOfGenres(ids[i]) + '.';
       } else {
-        genres += Utils.getGenres(ids[i]) + ', ';
+        genres += Utils.listOfGenres(ids[i]) + ', ';
       }
     }
     return genres;

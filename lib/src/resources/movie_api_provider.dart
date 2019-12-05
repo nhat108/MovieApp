@@ -26,9 +26,9 @@ class MovideApiProvider {
     }
   }
 
-  Future<ItemModel> fetchTopRated() async {
+  Future<ItemModel> fetchTopRated(int page) async {
     final response =
-        await http.get('$_baseUrl/movie/top_rated?api_key=$_apiKey&language=en-US&page=1');
+        await http.get('$_baseUrl/movie/top_rated?api_key=$_apiKey&language=en-US&page=1&page=$page');
     if (response.statusCode == 200) {
       return ItemModel.fromJson(json.decode(response.body));
     } else {

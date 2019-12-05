@@ -6,7 +6,7 @@ class Repository{
 
   Future<ItemModel> fetchTrendingMovies()=>moviesApiProvider.fetchMovieTreding();
   Future<ItemModel>fetchDiscoverMovies()=>moviesApiProvider.fetchMovieDiscover();
-  Future<ItemModel>fetchTopRated()=>moviesApiProvider.fetchTopRated();
+  Future<ItemModel>fetchTopRated(int page)=>moviesApiProvider.fetchTopRated(page);
   Future<ItemModel>fetchUpComming()=>moviesApiProvider.fetchUpComming();
   Future<Credits>fetchCast(int id)=>moviesApiProvider.fetchCast(id);
   Future<ItemModel>fetchRecommend(int id)=>moviesApiProvider.fetchRecommendations(id);

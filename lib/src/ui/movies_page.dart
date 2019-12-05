@@ -1,12 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:nux_movie/src/blocs/demo_bloc.dart';
 import 'package:nux_movie/src/blocs/movies_bloc.dart';
 import 'package:nux_movie/src/models/item_model.dart';
+import 'package:nux_movie/src/ui/view_all_movie_page.dart';
 import 'package:nux_movie/src/utils/colors.dart';
-import 'package:nux_movie/src/utils/error.dart';
 import 'package:nux_movie/src/utils/search.dart';
 import 'package:nux_movie/src/widgets/card_scroll.dart';
-import 'package:nux_movie/src/widgets/list.dart';
+import 'package:nux_movie/src/widgets/list_movie.dart';
+import 'package:nux_movie/src/widgets/waiting_widget.dart';
 import 'movie_detail.dart';
 
 class MoviesPage extends StatefulWidget {
@@ -16,254 +17,134 @@ class MoviesPage extends StatefulWidget {
 }
 
 class _MoviesPageState extends State<MoviesPage> {
-  LoadingBloc loadingBloc = new LoadingBloc(initCount: 0);
   @override
   void initState() {
     super.initState();
     bloc.fetchDiscoverMovies();
     bloc.fetchTrendingMovies();
-    bloc.fetchTopRatedMovie();
+    bloc.fetchTopRatedMovie(1);
     bloc.fetchUpCommingMovie();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    print('dispose movies page!!!');
     super.dispose();
-    loadingBloc.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(MovieColor.kPrimaryColor),
-      body: SafeArea(
-        child: Stack(
+      body: SingleChildScrollView(
+        child: Column(
           children: <Widget>[
-            SingleChildScrollView(
-              child: Column(
+            Container(
+              margin: EdgeInsets.only(top: 40),
+              alignment: AlignmentDirectional.centerStart,
+              padding: EdgeInsets.only(left: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(top: 20),
-                    alignment: AlignmentDirectional.centerStart,
-                    padding: EdgeInsets.only(left: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          'Trending',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 43,
-                              fontWeight: FontWeight.w700,
-                              fontFamily: 'Calibre-Semibold',
-                              letterSpacing: 1),
-                        ),
-                        RawMaterialButton(
-                          child: Icon(
-                            Icons.search,
-                            size: 26,
-                            color: Colors.white,
-                          ),
-                          fillColor: Color(0xFF7E4CE3),
-                          shape: CircleBorder(),
-                          padding: EdgeInsets.all(8),
-                          onPressed: () {
-                            showSearch(
-                                context: context, delegate: MovieSearch());
-                          },
-                        ),
-                      ],
+                  Text(
+                    'Trending',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 43,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: 'Calibre-Semibold',
+                        letterSpacing: 1),
+                  ),
+                  RawMaterialButton(
+                    child: Icon(
+                      Icons.search,
+                      size: 26,
+                      color: Colors.white,
                     ),
-                  ),
-                  StreamBuilder(
-                    stream: bloc.trending,
-                    builder: (context, AsyncSnapshot<ItemModel> snapshot) {
-                      if (snapshot.hasData) {
-                        loadingBloc.increment();
-                        List<Result> results = snapshot.data.results;
-                        return CardScroll(
-                          results: results,
-                        );
-                      }
-                      if (snapshot.connectionState == ConnectionState.waiting)
-                        return Container(
-                          padding: EdgeInsets.all(50),
-                          child: CircularProgressIndicator(),
-                        );
-                      if (snapshot.hasError)
-                        return ErrorUtils.getErrorTrending(context);
-                      return Container();
+                    fillColor: Color(0xFF7E4CE3),
+                    shape: CircleBorder(),
+                    padding: EdgeInsets.all(8),
+                    onPressed: () {
+                      showSearch(context: context, delegate: MovieSearch());
                     },
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Container(
-                        alignment: AlignmentDirectional.centerStart,
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: Text(
-                          'DISCOVER',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontFamily: 'Calibre-Semibold',
-                              letterSpacing: 1),
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: Text(
-                          'View all',
-                          style: TextStyle(
-                            color: Colors.blueAccent,
-                            fontSize: 18,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  StreamBuilder(
-                    stream: bloc.discover,
-                    builder: (context, AsyncSnapshot<ItemModel> snapshot) {
-                      if (snapshot.hasData) {
-                        loadingBloc.increment();
-                        List<Result> results = snapshot.data.results;
-                        return ListMovie(
-                          results: results,
-                          kind: 'discover',
-                        );
-                      }
-                      if (snapshot.connectionState == ConnectionState.waiting)
-                        return Container(
-                          padding: EdgeInsets.all(50),
-                          child: CircularProgressIndicator(),
-                        );
-                      if (snapshot.hasError) return Icon(Icons.error);
-                      return Container();
-                    },
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Container(
-                        alignment: AlignmentDirectional.centerStart,
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: Text(
-                          'TOP RATED',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontFamily: 'Calibre-Semibold',
-                              letterSpacing: 1),
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: Text(
-                          'View all',
-                          style: TextStyle(
-                            color: Colors.blueAccent,
-                            fontSize: 18,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  StreamBuilder(
-                    stream: bloc.topRated,
-                    builder: (context, AsyncSnapshot<ItemModel> snapshot) {
-                      if (snapshot.hasData) {
-                        loadingBloc.increment();
-                        return ListMovie(
-                          results: snapshot.data.results,
-                          kind: 'toprated',
-                        );
-                      }
-                      if (snapshot.connectionState == ConnectionState.waiting)
-                        return Container(
-                          padding: EdgeInsets.all(50),
-                          child: CircularProgressIndicator(),
-                        );
-                      if (snapshot.hasError) return Icon(Icons.error);
-                      return Container();
-                    },
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Container(
-                        alignment: AlignmentDirectional.centerStart,
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: Text(
-                          'UP COMMING',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontFamily: 'Calibre-Semibold',
-                              letterSpacing: 1),
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 20),
-                        child: Text(
-                          'View all',
-                          style: TextStyle(
-                            color: Colors.blueAccent,
-                            fontSize: 18,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  StreamBuilder(
-                    stream: bloc.upComming,
-                    builder: (context, AsyncSnapshot<ItemModel> snapshot) {
-                      if (snapshot.hasData) {
-                        loadingBloc.increment();
-                        return ListMovie(
-                          results: snapshot.data.results,
-                          kind: 'upcomming',
-                        );
-                      }
-                      if (snapshot.connectionState == ConnectionState.waiting)
-                        return Container(
-                          padding: EdgeInsets.all(50),
-                          child: CircularProgressIndicator(),
-                        );
-                      if (snapshot.hasError) return Icon(Icons.error);
-                      return Container();
-                    },
-                  )
                 ],
               ),
             ),
-            StreamBuilder<int>(
-              stream: loadingBloc.counterObservable,
+            StreamBuilder<ItemModel>(
+              stream: bloc.trending,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  if (snapshot.data < 2)
-                    return Container(
-                        color: Color(MovieColor.kPrimaryColor),
-                        alignment: Alignment.center,
-                        child: CircularProgressIndicator());
+                  List<Result> results = snapshot.data.results;
+                  return CardScroll(
+                    results: results,
+                  );
                 }
-                return SizedBox();
+                if (snapshot.connectionState == ConnectionState.waiting)
+                  return WaitingWidget();
+
+                return Container();
+              },
+            ),
+            buildTitle('DISCOVER'),
+            SizedBox(
+              height: 5,
+            ),
+            StreamBuilder<ItemModel>(
+              stream: bloc.discover,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List<Result> results = snapshot.data.results;
+                  return ListMovie(
+                    results: results,
+                    kind: 'discover',
+                  );
+                }
+                if (snapshot.connectionState == ConnectionState.waiting)
+                  return WaitingWidget();
+                return Container();
+              },
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            buildTitle('TOP RATED'),
+            SizedBox(
+              height: 5,
+            ),
+            StreamBuilder(
+              stream: bloc.topRated,
+              builder: (context, AsyncSnapshot<ItemModel> snapshot) {
+                if (snapshot.hasData) {
+                  return ListMovie(
+                    results: snapshot.data.results,
+                    kind: 'toprated',
+                  );
+                }
+                if (snapshot.connectionState == ConnectionState.waiting)
+                  return WaitingWidget();
+                return Container();
+              },
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            buildTitle('UP COMMING'),
+            SizedBox(
+              height: 5,
+            ),
+            StreamBuilder<ItemModel>(
+              stream: bloc.upComming,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListMovie(
+                    results: snapshot.data.results,
+                    kind: 'upcomming',
+                  );
+                }
+                if (snapshot.connectionState == ConnectionState.waiting)
+                  return WaitingWidget();
+                return Container();
               },
             )
           ],
@@ -272,14 +153,33 @@ class _MoviesPageState extends State<MoviesPage> {
     );
   }
 
-  openMovieDetailPage({Result result, String heroTag}) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => MovieDetail(
-                result: result,
-                heroTag: heroTag,
-              )),
+  Widget buildTitle(String title) {
+    return ListTile(
+      title: Text(
+        title,
+        style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontFamily: 'Calibre-Semibold',
+            letterSpacing: 1),
+      ),
+      trailing: Text(
+        'View all',
+        style: TextStyle(
+          color: Colors.blueAccent,
+          fontSize: 18,
+        ),
+      ),
+      onTap: () {
+        _navigateToViewAllMoviePage(title);
+      },
     );
   }
+
+  _navigateToViewAllMoviePage(String kind) {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => ViewAllMovie()));
+  }
+
+  
 }

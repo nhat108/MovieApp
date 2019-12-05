@@ -1,3 +1,5 @@
+import 'package:equatable/equatable.dart';
+
 class Result {
   bool adult;
   String overview;
@@ -51,13 +53,19 @@ class Result {
   }
 }
 
-class ItemModel {
-  int page;
-  int totalResults;
-  int totalPages;
-  List<Result> results;
+class ItemModel extends Equatable {
+  final int page;
+  final int totalResults;
+  final int totalPages;
+  final List<Result> results;
+  final bool hasReachedMax;
 
-  ItemModel({this.page, this.totalResults, this.totalPages, this.results});
+  ItemModel(
+      {this.hasReachedMax,
+      this.page,
+      this.totalResults,
+      this.totalPages,
+      this.results});
 
   factory ItemModel.fromJson(Map<String, dynamic> json) {
     var resultList = json['results'] as List;
@@ -69,12 +77,23 @@ class ItemModel {
       results: discoverList,
     );
   }
-  factory ItemModel.fromJsonCast(Map<String,dynamic>json){
-    var list=json['cast']as List;
-    List<Result>results=list.map((i)=>Result.fromJson(i)).toList();
+  factory ItemModel.fromJsonCast(Map<String, dynamic> json) {
+    var list = json['cast'] as List;
+    List<Result> results = list.map((i) => Result.fromJson(i)).toList();
+    return ItemModel(results: results);
+  }
+  ItemModel copyWith(
+      {List<Result> results,
+      bool hasReachedMax,
+      int page,
+      int totalPages,
+      int totalResults}) {
     return ItemModel(
-      results: results
-    );
+        results: results ?? this.results,
+        page: page ?? this.page,
+        totalPages: totalPages??this.totalPages,
+        totalResults: totalResults??this.totalResults,
+        hasReachedMax: hasReachedMax ?? this.hasReachedMax);
   }
 }
 
@@ -237,57 +256,60 @@ class Person {
       this.popularity,
       this.profilePath});
 
-  factory Person.fromJson(Map<String,dynamic>json){
+  factory Person.fromJson(Map<String, dynamic> json) {
     return Person(
-      birthday: json['birthday'],
-      knownForDepartment: json['known_for_department'],
-      deathday: json['deathday'],
-      id:json['id'],
-      name:json['name'],
-      gender: json['gender'],
-      biography: json['biography'],
-      popularity: json['popularity'],
-      placeOfBirth: json['place_of_birth'],
-      profilePath: json['profile_path'],
-      adult: json['adult'],
-      imdbId:json['imdb_id']
-    );
+        birthday: json['birthday'],
+        knownForDepartment: json['known_for_department'],
+        deathday: json['deathday'],
+        id: json['id'],
+        name: json['name'],
+        gender: json['gender'],
+        biography: json['biography'],
+        popularity: json['popularity'],
+        placeOfBirth: json['place_of_birth'],
+        profilePath: json['profile_path'],
+        adult: json['adult'],
+        imdbId: json['imdb_id']);
   }
 }
+
 class MovieTrailer {
   int id;
   List<Trailer> trailers;
-  MovieTrailer({this.id,this.trailers});
-  
-  factory MovieTrailer.json(Map<String,dynamic>json){
-    var list =json['results']as List;
-    List<Trailer>trailers=list.map((i)=>Trailer.fromJson(i)).toList();
-    return MovieTrailer(
-      id: json['id'],
-      trailers: trailers
-    );
-  }
+  MovieTrailer({this.id, this.trailers});
 
+  factory MovieTrailer.json(Map<String, dynamic> json) {
+    var list = json['results'] as List;
+    List<Trailer> trailers = list.map((i) => Trailer.fromJson(i)).toList();
+    return MovieTrailer(id: json['id'], trailers: trailers);
+  }
 }
-class Trailer{
-   String id;
- String iso6391;
- String iso31661;
- String key;
- String name;
- String site;
- int size;
- String type;
- Trailer({this.id,this.iso31661,this.iso6391,this.key,this.name,this.site,this.size,this.type});
 
-  factory Trailer.fromJson(Map<String,dynamic>json){
+class Trailer {
+  String id;
+  String iso6391;
+  String iso31661;
+  String key;
+  String name;
+  String site;
+  int size;
+  String type;
+  Trailer(
+      {this.id,
+      this.iso31661,
+      this.iso6391,
+      this.key,
+      this.name,
+      this.site,
+      this.size,
+      this.type});
+
+  factory Trailer.fromJson(Map<String, dynamic> json) {
     return Trailer(
-      key: json['key'],
-      name: json['name'],
-      site: json['youtube'],
-      type: json['type'],
-      id:json['id']
-    );
+        key: json['key'],
+        name: json['name'],
+        site: json['youtube'],
+        type: json['type'],
+        id: json['id']);
   }
-
 }
