@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:nux_movie/src/contants/colors.dart';
 import 'package:nux_movie/src/models/item_model.dart';
 import 'package:nux_movie/src/ui/play_video_screen.dart';
 import 'package:nux_movie/src/utils/error.dart';
@@ -11,7 +12,6 @@ import 'package:nux_movie/src/widgets/recommendations_list.dart';
 import 'package:nux_movie/src/widgets/reviews.dart';
 import 'package:nux_movie/src/widgets/waiting_widget.dart';
 import '../blocs/movies_bloc.dart';
-import '../utils/colors.dart';
 
 class MovieDetail extends StatefulWidget {
   final Result result;
@@ -35,7 +35,7 @@ class _MovieDetailState extends State<MovieDetail> {
     return Scaffold(
       body: Container(
         constraints: BoxConstraints.expand(),
-        color: Color(MovieColor.kPrimaryDarkColor),
+        color: Color(kPrimaryDarkColor),
         child: Stack(
           children: <Widget>[
             _getBackground(),
@@ -109,7 +109,7 @@ class _MovieDetailState extends State<MovieDetail> {
                     padding: EdgeInsets.all(15.0),
                     margin: EdgeInsets.only(top: 25.0),
                     decoration: BoxDecoration(
-                        color: Color(MovieColor.kPrimaryColor),
+                        color: Color(kPrimaryColor),
                         borderRadius: BorderRadius.circular(5.0)),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -196,7 +196,7 @@ class _MovieDetailState extends State<MovieDetail> {
           padding: EdgeInsets.all(10),
           margin: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
           decoration: BoxDecoration(
-              color: Color(MovieColor.kPrimaryColor),
+              color: Color(kPrimaryColor),
               borderRadius: BorderRadius.circular(5.0)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -204,7 +204,7 @@ class _MovieDetailState extends State<MovieDetail> {
               Text(
                 'Story Line',
                 style: TextStyle(
-                    fontSize: 20, color: Color(MovieColor.kTextColor)),
+                    fontSize: 20, color: Color(kTextColor)),
               ),
               SizedBox(
                 height: 8,
@@ -217,7 +217,7 @@ class _MovieDetailState extends State<MovieDetail> {
               Text(
                 'Cast',
                 style: TextStyle(
-                    fontSize: 20, color: Color(MovieColor.kTextColor)),
+                    fontSize: 20, color: Color(kTextColor)),
               ),
               StreamBuilder(
                 stream: bloc.casts,
@@ -235,7 +235,7 @@ class _MovieDetailState extends State<MovieDetail> {
                 'Recommendations',
                 style: TextStyle(
                   fontSize: 20,
-                  color: Color(MovieColor.kTextColor),
+                  color: Color(kTextColor),
                 ),
               ),
               StreamBuilder(

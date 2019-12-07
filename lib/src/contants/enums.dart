@@ -1,0 +1,1 @@
+enum TypeOfMovie{DISCOVER,TOPRATED,UPCOMING}

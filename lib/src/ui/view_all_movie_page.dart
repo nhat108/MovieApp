@@ -1,15 +1,25 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nux_movie/src/blocs/movie_bloc.dart';
 import 'package:nux_movie/src/blocs/movie_event.dart';
 import 'package:nux_movie/src/blocs/movie_state.dart';
+import 'package:nux_movie/src/contants/colors.dart';
+import 'package:nux_movie/src/contants/enums.dart';
 import 'package:nux_movie/src/models/item_model.dart';
 import 'package:nux_movie/src/utils/utils.dart';
 import 'package:http/http.dart' as http;
+import 'package:nux_movie/src/widgets/custom_cached_network_image.dart';
+import 'package:nux_movie/src/widgets/custom_text.dart';
 import 'package:nux_movie/src/widgets/waiting_widget.dart';
 
+import 'movie_detail.dart';
+
 class ViewAllMovie extends StatefulWidget {
+  final String title;
+  final TypeOfMovie type;
+
+  const ViewAllMovie({Key key, this.title, this.type}) : super(key: key);
   @override
   _ViewAllMovieState createState() => _ViewAllMovieState();
 }
@@ -17,13 +27,14 @@ class ViewAllMovie extends StatefulWidget {
 class _ViewAllMovieState extends State<ViewAllMovie> {
   final _scrollController = ScrollController();
   final _scrollThreshold = 200.0;
-  final MovieBloc _movieBloc = MovieBloc(httpClient: http.Client());
+  MovieBloc _movieBloc;
 
   @override
   void initState() {
-    super.initState();
+    _movieBloc = MovieBloc(httpClient: http.Client(), type: widget.type);
     _scrollController.addListener(_onScroll);
     _movieBloc.dispatch(Fetch());
+    super.initState();
   }
 
   @override
@@ -36,28 +47,33 @@ class _ViewAllMovieState extends State<ViewAllMovie> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: BlocBuilder(
-      bloc: _movieBloc,
-      builder: (context, state) {
-        if (state is MovieUninitialized) {
-          return WaitingWidget();
-        }
-        if (state is MovieLoaded) {
-          print('state:' +state.results.length.toString());
-          return ListView.builder(
-            itemBuilder: (context, index) {
-              return index >= state.results.length
-                  ? _bottomLoader()
-                  : _item(state.results[index]);
-            },
-            itemCount: state.hasReachedMax
-                ? state.results.length
-                : state.results.length + 1,
-            controller: _scrollController,
-          );
-        }
-        return Container();
-      },
+        body: CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(widget.title),
+      ),
+      child: BlocBuilder(
+        bloc: _movieBloc,
+        builder: (context, state) {
+          if (state is MovieUninitialized) {
+            return Center(child: WaitingWidget());
+          }
+          if (state is MovieLoaded) {
+            print('state:' + state.results.length.toString());
+            return ListView.builder(
+              itemBuilder: (context, index) {
+                return index >= state.results.length
+                    ? _bottomLoader()
+                    : _item(state.results[index]);
+              },
+              itemCount: state.hasReachedMax
+                  ? state.results.length
+                  : state.results.length + 1,
+              controller: _scrollController,
+            );
+          }
+          return Container();
+        },
+      ),
     ));
   }
 
@@ -77,86 +93,83 @@ class _ViewAllMovieState extends State<ViewAllMovie> {
           child: SizedBox(
             width: 33,
             height: 33,
-            child: CircularProgressIndicator(
-              strokeWidth: 1.5,
-            ),
+            child: CupertinoActivityIndicator(),
           ),
         ),
       ),
     );
   }
 
+  _navigateToMovieDetailPage({Result result, String heroTag}) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => MovieDetail(
+                result: result,
+                heroTag: heroTag,
+              )),
+    );
+  }
+
   _item(Result result) {
-    return Container(
-      key: Key('{$result.id}'),
-      width: 120,
-      height: 200,
-      margin: EdgeInsets.all(7),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Expanded(
-            flex: 8,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(4.0),
-              child: CachedNetworkImage(
-                imageUrl:
-                    'https://image.tmdb.org/t/p/w185/${result.posterPath}',
-                width: 120,
-                height: 170,
-                fit: BoxFit.cover,
+    return InkWell(
+      onTap: (){
+        _navigateToMovieDetailPage(result: result,heroTag: result.id.toString());
+      },
+      child: Container(
+        height: 175,
+        padding: EdgeInsets.only(left: 15, right: 15, top: 10),
+        key: Key('{$result.id}'),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            CustomCachedNetWorkImage(
+              photoUrl: result.posterPath,
+              width: MediaQuery.of(context).size.width * 0.35,
+              height: 175,
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  CustomText(
+                    result.title,
+                    textColor: Color(kTextColor2),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  SizedBox(
+                    height: 3,
+                  ),
+                  CustomText(
+                    Utils.getGenresList(result.genreIds),
+                    fontWeight: FontWeight.w500,
+                    textColor: Color(kWhiteTextColor),
+                  ),
+                  SizedBox(
+                    height: 3,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.star,
+                        color: Colors.yellow,
+                        size: 20,
+                      ),
+                      SizedBox(
+                        width: 3,
+                      ),
+                      Text('${result.voteAverage}')
+                    ],
+                  )
+                ],
               ),
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Expanded(
-            flex: 2,
-            child: Text(
-              '${result.title}',
-              maxLines: 2,
-              style: TextStyle(
-                  color: Color(0xFFff877c),
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16),
-            ),
-          ),
-          SizedBox(
-            height: 3,
-          ),
-          Expanded(
-            flex: 1,
-            child: Text(
-              Utils.getGenresList(result.genreIds),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFFffe3d8),
-                  fontSize: 12),
-            ),
-          ),
-          SizedBox(
-            height: 3,
-          ),
-          Expanded(
-            flex: 1,
-            child: Row(
-              children: <Widget>[
-                Icon(
-                  Icons.star,
-                  color: Colors.yellow,
-                  size: 20,
-                ),
-                SizedBox(
-                  width: 3,
-                ),
-                Text('${result.voteAverage}')
-              ],
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

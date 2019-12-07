@@ -46,9 +46,9 @@ class MoviesBloc {
     }
   }
 
-  fetchDiscoverMovies() async {
+  fetchDiscoverMovies(int page) async {
     if (!_moviesDiscover.isClosed) {
-      _repository.fetchDiscoverMovies().then((onValue) {
+      _repository.fetchDiscoverMovies(page).then((onValue) {
         ItemModel itemModel = onValue;
         _moviesDiscover.sink.add(itemModel);
       }).catchError((onError) {
@@ -70,9 +70,9 @@ class MoviesBloc {
     }
   }
 
-  fetchUpCommingMovie() async {
+  fetchUpCommingMovie(int page) async {
     if (!_moviesUpComming.isClosed) {
-      _repository.fetchUpComming().then((onValue) {
+      _repository.fetchUpComming(page).then((onValue) {
         ItemModel itemModel = onValue;
         _moviesUpComming.sink.add(itemModel);
       }).catchError((onError) {

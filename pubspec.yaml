@@ -6,6 +6,7 @@ environment:
   sdk: ">=2.2.2 <3.0.0"
 
 dependencies:
+  shared_preferences: ^0.5.4+8
   equatable: ^0.2.0
   flutter_bloc: ^0.21.0 #bloc
   app_settings: ^1.0.6+2 #opening iOS and Android phone settings from an app.

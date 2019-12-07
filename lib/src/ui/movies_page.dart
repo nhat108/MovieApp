@@ -1,14 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nux_movie/src/blocs/movies_bloc.dart';
+import 'package:nux_movie/src/contants/colors.dart';
+import 'package:nux_movie/src/contants/enums.dart';
 import 'package:nux_movie/src/models/item_model.dart';
+import 'package:nux_movie/src/ui/search_movie_delegate.dart';
 import 'package:nux_movie/src/ui/view_all_movie_page.dart';
-import 'package:nux_movie/src/utils/colors.dart';
-import 'package:nux_movie/src/utils/search.dart';
+import 'package:nux_movie/src/utils/store_search_query.dart';
 import 'package:nux_movie/src/widgets/card_scroll.dart';
 import 'package:nux_movie/src/widgets/list_movie.dart';
 import 'package:nux_movie/src/widgets/waiting_widget.dart';
-import 'movie_detail.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MoviesPage extends StatefulWidget {
   const MoviesPage({Key key}) : super(key: key);
@@ -20,10 +22,10 @@ class _MoviesPageState extends State<MoviesPage> {
   @override
   void initState() {
     super.initState();
-    bloc.fetchDiscoverMovies();
+    bloc.fetchDiscoverMovies(1);
     bloc.fetchTrendingMovies();
     bloc.fetchTopRatedMovie(1);
-    bloc.fetchUpCommingMovie();
+    bloc.fetchUpCommingMovie(1);
   }
 
   @override
@@ -35,7 +37,7 @@ class _MoviesPageState extends State<MoviesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(MovieColor.kPrimaryColor),
+      backgroundColor: Color(kPrimaryColor),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
@@ -64,8 +66,13 @@ class _MoviesPageState extends State<MoviesPage> {
                     fillColor: Color(0xFF7E4CE3),
                     shape: CircleBorder(),
                     padding: EdgeInsets.all(8),
-                    onPressed: () {
-                      showSearch(context: context, delegate: MovieSearch());
+                    onPressed: () async {
+                      SharedPreferences sharedPreferences =
+                          await SharedPreferences.getInstance();
+                      showSearch(
+                          context: context,
+                          delegate: SearchMovieDelegate(
+                              StoreSearchQuery(sharedPreferences)));
                     },
                   ),
                 ],
@@ -86,7 +93,7 @@ class _MoviesPageState extends State<MoviesPage> {
                 return Container();
               },
             ),
-            buildTitle('DISCOVER'),
+            buildTitle('DISCOVER', TypeOfMovie.DISCOVER),
             SizedBox(
               height: 5,
             ),
@@ -108,7 +115,7 @@ class _MoviesPageState extends State<MoviesPage> {
             SizedBox(
               height: 5,
             ),
-            buildTitle('TOP RATED'),
+            buildTitle('TOP RATED', TypeOfMovie.TOPRATED),
             SizedBox(
               height: 5,
             ),
@@ -129,7 +136,7 @@ class _MoviesPageState extends State<MoviesPage> {
             SizedBox(
               height: 5,
             ),
-            buildTitle('UP COMMING'),
+            buildTitle('UP COMING', TypeOfMovie.UPCOMING),
             SizedBox(
               height: 5,
             ),
@@ -153,7 +160,7 @@ class _MoviesPageState extends State<MoviesPage> {
     );
   }
 
-  Widget buildTitle(String title) {
+  Widget buildTitle(String title, TypeOfMovie type) {
     return ListTile(
       title: Text(
         title,
@@ -171,15 +178,15 @@ class _MoviesPageState extends State<MoviesPage> {
         ),
       ),
       onTap: () {
-        _navigateToViewAllMoviePage(title);
+        _navigateToViewAllMoviePage(title, type);
       },
     );
   }
 
-  _navigateToViewAllMoviePage(String kind) {
+  _navigateToViewAllMoviePage(String title, type) {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => ViewAllMovie()));
+        context,
+        MaterialPageRoute(
+            builder: (context) => ViewAllMovie(title: title, type: type)));
   }
-
-  
 }

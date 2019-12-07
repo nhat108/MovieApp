@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:nux_movie/src/contants/colors.dart';
 import 'package:nux_movie/src/ui/fun_page.dart';
 import 'package:nux_movie/src/ui/movies_page.dart';
 import 'package:nux_movie/src/ui/review_page.dart';
 import 'package:nux_movie/src/ui/about_page.dart';
-import 'package:nux_movie/src/utils/colors.dart';
 import 'package:nux_movie/src/utils/nux_bottom_bar.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:nux_movie/src/widgets/offline.dart';
@@ -85,7 +85,7 @@ class _HomePageState extends State<HomePage> {
             _selectedIndex = index;
           });
         },
-        backgroundColor: Color(MovieColor.kPrimaryDarkColor),
+        backgroundColor: Color(kPrimaryDarkColor),
         items: [
           NuxBottomBarItem(
             icon: Icon(Icons.movie_filter),

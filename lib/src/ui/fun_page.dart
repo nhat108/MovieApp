@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nux_movie/src/utils/colors.dart';
+import 'package:nux_movie/src/contants/colors.dart';
 
 class FunPage extends StatefulWidget {
   const FunPage({Key key}) : super(key: key);
@@ -23,7 +23,7 @@ class _FunPageState extends State<FunPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(MovieColor.kPrimaryColor),
+      backgroundColor: Color(kPrimaryColor),
       body: SafeArea(
         child: Container(
           height: MediaQuery.of(context).size.height,

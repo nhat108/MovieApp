@@ -3,14 +3,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:nux_movie/src/blocs/movie_event.dart';
 import 'package:nux_movie/src/blocs/movie_state.dart';
+import 'package:nux_movie/src/contants/enums.dart';
 import 'package:nux_movie/src/models/item_model.dart';
 import 'package:nux_movie/src/resources/respository.dart';
 import 'package:rxdart/rxdart.dart';
 
 class MovieBloc extends Bloc<MovieEvent, MovieState> {
   final http.Client httpClient;
-
-  MovieBloc({@required this.httpClient});
+  Repository _repository = Repository();
+  final TypeOfMovie type;
+  MovieBloc({@required this.httpClient,@required this.type});
 
   @override
   Stream<MovieState> transformEvents(
@@ -40,10 +42,6 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
         if (currentState is MovieLoaded) {
           final ItemModel itemModel = await _fetchMovies(
               (currentState as MovieLoaded).itemModel.page + 1);
-          var oldItem = (currentState as MovieLoaded).itemModel;
-          var newItem =
-              itemModel.copyWith(results: oldItem.results + itemModel.results);
-
           yield itemModel.totalPages == itemModel.page
               ? (currentState as MovieLoaded).copyWith(hasReachedMax: true)
               : MovieLoaded(
@@ -62,8 +60,19 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
       state is MovieLoaded && state.hasReachedMax;
 
   Future<ItemModel> _fetchMovies(int page) async {
-    final _repository = Repository();
-    ItemModel itemModel = await _repository.fetchTopRated(page);
+    ItemModel itemModel;
+    print('type: '+type.toString());
+    switch(type){
+      case TypeOfMovie.DISCOVER:
+        itemModel=await _repository.fetchDiscoverMovies(page);
+        break;
+      case TypeOfMovie.TOPRATED:
+        itemModel= await _repository.fetchTopRated(page);
+        break;
+      case TypeOfMovie.UPCOMING:
+       itemModel=await _repository.fetchUpComming(page);
+        break;
+    }
     return itemModel;
   }
 }

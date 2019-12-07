@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nux_movie/src/utils/colors.dart';
+import 'package:nux_movie/src/contants/colors.dart';
 import 'package:nux_movie/src/utils/utils.dart';
 
 
@@ -9,7 +9,7 @@ class AboutPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     return Scaffold(
-        backgroundColor: Color(MovieColor.kPrimaryColor),
+        backgroundColor: Color(kPrimaryColor),
         body: SafeArea(
           child: Container(
             height: height,

@@ -3,8 +3,8 @@ import 'dart:ui' as prefix0;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:nux_movie/src/contants/colors.dart';
 import 'package:nux_movie/src/models/item_model.dart';
-import 'package:nux_movie/src/utils/colors.dart';
 import 'package:nux_movie/src/utils/error.dart';
 import 'package:nux_movie/src/utils/utils.dart';
 import 'package:nux_movie/src/widgets/biography_card.dart';
@@ -32,7 +32,7 @@ class _PersonPageState extends State<PersonPage> {
     return Scaffold(
       body: Container(
         constraints: BoxConstraints.expand(),
-        color: Color(MovieColor.kPrimaryColor),
+        color: Color(kPrimaryColor),
         child: Stack(
           children: <Widget>[
             _getBackground(profilePath: widget.profilePath),
@@ -110,7 +110,7 @@ class _PersonPageState extends State<PersonPage> {
                           padding: EdgeInsets.all(15.0),
                           margin: EdgeInsets.only(top: 80),
                           decoration: BoxDecoration(
-                              color: Color(MovieColor.kPrimaryColor),
+                              color: Color(kPrimaryColor),
                               borderRadius: BorderRadius.circular(5.0)),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -192,7 +192,7 @@ class _PersonPageState extends State<PersonPage> {
                 padding: EdgeInsets.all(10),
                 margin: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
                 decoration: BoxDecoration(
-                  color: Color(MovieColor.kPrimaryColor),
+                  color: Color(kPrimaryColor),
                   borderRadius: BorderRadius.circular(5.0),
                 ),
                 child: Column(
@@ -201,7 +201,7 @@ class _PersonPageState extends State<PersonPage> {
                     Text(
                       'Biography',
                       style: TextStyle(
-                          fontSize: 20, color: Color(MovieColor.kTextColor)),
+                          fontSize: 20, color: Color(kTextColor)),
                     ),
                     SizedBox(
                       height: 5,
@@ -216,7 +216,7 @@ class _PersonPageState extends State<PersonPage> {
                     Text(
                       'Know For',
                       style: TextStyle(
-                          fontSize: 20, color: Color(MovieColor.kTextColor)),
+                          fontSize: 20, color: Color(kTextColor)),
                     ),
                     StreamBuilder(
                       stream: bloc.personMovies,

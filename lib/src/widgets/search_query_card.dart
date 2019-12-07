@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:nux_movie/src/contants/colors.dart';
 import 'package:nux_movie/src/models/item_model.dart';
 import 'package:nux_movie/src/ui/movie_detail.dart';
-import 'package:nux_movie/src/utils/colors.dart';
 import 'package:nux_movie/src/utils/error.dart';
 
 import '../blocs/movies_bloc.dart';
@@ -25,7 +25,7 @@ class _SearchCardState extends State<SearchCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Color(MovieColor.kPrimaryColor),
+      color: Color(kPrimaryColor),
       child: StreamBuilder<ItemModel>(
         stream: bloc.searchMovie,
         builder: (context, snapshot) {

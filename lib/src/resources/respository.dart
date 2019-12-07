@@ -5,9 +5,9 @@ class Repository{
   final moviesApiProvider=MovideApiProvider();
 
   Future<ItemModel> fetchTrendingMovies()=>moviesApiProvider.fetchMovieTreding();
-  Future<ItemModel>fetchDiscoverMovies()=>moviesApiProvider.fetchMovieDiscover();
+  Future<ItemModel>fetchDiscoverMovies(int page)=>moviesApiProvider.fetchMovieDiscover(page);
   Future<ItemModel>fetchTopRated(int page)=>moviesApiProvider.fetchTopRated(page);
-  Future<ItemModel>fetchUpComming()=>moviesApiProvider.fetchUpComming();
+  Future<ItemModel>fetchUpComming(int page)=>moviesApiProvider.fetchUpComming(page);
   Future<Credits>fetchCast(int id)=>moviesApiProvider.fetchCast(id);
   Future<ItemModel>fetchRecommend(int id)=>moviesApiProvider.fetchRecommendations(id);
   Future<ReviewList>fetchReviews(int id)=>moviesApiProvider.fetchReviews(id);
