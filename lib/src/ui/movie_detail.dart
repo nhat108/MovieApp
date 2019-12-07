@@ -7,6 +7,7 @@ import 'package:nux_movie/src/ui/play_video_screen.dart';
 import 'package:nux_movie/src/utils/error.dart';
 import 'package:nux_movie/src/utils/utils.dart';
 import 'package:nux_movie/src/widgets/cast_list.dart';
+import 'package:nux_movie/src/widgets/custom_text.dart';
 import 'package:nux_movie/src/widgets/image_widget.dart';
 import 'package:nux_movie/src/widgets/recommendations_list.dart';
 import 'package:nux_movie/src/widgets/reviews.dart';
@@ -203,8 +204,7 @@ class _MovieDetailState extends State<MovieDetail> {
             children: <Widget>[
               Text(
                 'Story Line',
-                style: TextStyle(
-                    fontSize: 20, color: Color(kTextColor)),
+                style: TextStyle(fontSize: 20, color: Color(kTextColor)),
               ),
               SizedBox(
                 height: 8,
@@ -216,20 +216,26 @@ class _MovieDetailState extends State<MovieDetail> {
               ),
               Text(
                 'Cast',
-                style: TextStyle(
-                    fontSize: 20, color: Color(kTextColor)),
+                style: TextStyle(fontSize: 20, color: Color(kTextColor)),
               ),
+              SizedBox(height:5 ,),
               StreamBuilder(
                 stream: bloc.casts,
                 builder: (context, AsyncSnapshot<Credits> snapshot) {
-                  if (snapshot.hasData)
+                  if (snapshot.hasData) {
+                    var casts = snapshot.data.cast;
+                    if (casts.isEmpty) return _buildCastEmpty();
                     return CastList(
                       casts: snapshot.data.cast,
                     );
+                  }
                   if (snapshot.connectionState == ConnectionState.waiting)
                     return WaitingWidget();
                   return Container();
                 },
+              ),
+              SizedBox(
+                height: 10,
               ),
               Text(
                 'Recommendations',
@@ -242,6 +248,8 @@ class _MovieDetailState extends State<MovieDetail> {
                 stream: bloc.recommend,
                 builder: (context, AsyncSnapshot<ItemModel> snapshot) {
                   if (snapshot.hasData) {
+                    var resutls=snapshot.data.results;
+                    if(resutls.isEmpty) return _buildRecommendEmpty();
                     return RecommendationsList(
                       results: snapshot.data.results,
                     );
@@ -343,6 +351,16 @@ class _MovieDetailState extends State<MovieDetail> {
     );
   }
 
+  _buildCastEmpty() {
+    return Container(
+      child: CustomText("We don't have any cast added to this movie."),
+    );
+  }
+  _buildRecommendEmpty(){
+    return Container(
+      child: CustomText("We don't have enough data to suggest any movies based on ${widget.result.title}.",maxLines: 2,),
+    );
+  }
   _buildTrailerButton() => StreamBuilder<MovieTrailer>(
         stream: bloc.movieTrailer,
         builder: (context, snapshot) {
