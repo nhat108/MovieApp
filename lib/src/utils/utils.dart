@@ -1,6 +1,8 @@
 import 'package:url_launcher/url_launcher.dart';
 
 class Utils {
+  static final _apiKeyGD = 'AIzaSyCUS-SHDu3m8ABIl5panRpqOO-7uXNyoeg';
+  static final _baseUrlGD = 'https://www.googleapis.com/drive/v3/files/';
   static var genresMap = {
     28: 'Action',
     12: 'Adventure',
@@ -22,7 +24,7 @@ class Utils {
     10752: 'War',
     37: 'Western'
   };
-  
+
   static String listOfGenres(int id) {
     String genres = genresMap[id];
     if (genres != null) {
@@ -46,7 +48,7 @@ class Utils {
 
   static int getAge(String yearOfBirth) {
     if (yearOfBirth == null) return 0;
-    
+
     var birth = DateTime.parse(yearOfBirth);
     var days = birth.difference(DateTime.now());
     return -(days.inDays / 365).floor();
@@ -58,5 +60,10 @@ class Utils {
     } else {
       print('Could not launch $url');
     }
+  }
+
+
+  static String getLinkMovieFromGD(String id) {
+    return _baseUrlGD + id + '?alt=media&key=' + _apiKeyGD;
   }
 }
