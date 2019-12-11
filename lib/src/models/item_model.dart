@@ -31,11 +31,14 @@ class Result {
       this.genreIds});
 
   factory Result.fromJson(Map<String, dynamic> json) {
-    var genres = json['genre_ids'] as List;
     List<int> list = List<int>();
-    genres.forEach((i) {
-      list.add(i);
-    });
+    if (json['genre_ids'] != null) {
+      var genres = json['genre_ids'] as List;
+      genres.forEach((i) {
+        list.add(i);
+      });
+    }
+
     return Result(
         voteCount: json['vote_count'],
         id: json['id'],
@@ -91,8 +94,8 @@ class ItemModel extends Equatable {
     return ItemModel(
         results: results ?? this.results,
         page: page ?? this.page,
-        totalPages: totalPages??this.totalPages,
-        totalResults: totalResults??this.totalResults,
+        totalPages: totalPages ?? this.totalPages,
+        totalResults: totalResults ?? this.totalResults,
         hasReachedMax: hasReachedMax ?? this.hasReachedMax);
   }
 }
