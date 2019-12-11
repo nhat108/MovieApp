@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nux_movie/src/contants/colors.dart';
+import 'package:nux_movie/src/ui/line_page.dart';
+import 'package:nux_movie/src/ui/movie_scripts_page.dart';
+import 'package:nux_movie/src/ui/watch_movie_list.dart';
 
 class FunPage extends StatefulWidget {
   const FunPage({Key key}) : super(key: key);
@@ -8,11 +11,7 @@ class FunPage extends StatefulWidget {
   _FunPageState createState() => _FunPageState();
 }
 
-enum KindFun {
-  movie_lines,
-  movie_quotes,
-  movie_scripts,
-}
+enum FunTypes { WATCH_MOVIES, MOVIE_LINES, MOVIE_QUOTES, MOVIE_SCRIPTS }
 
 class _FunPageState extends State<FunPage> {
   @override
@@ -25,38 +24,42 @@ class _FunPageState extends State<FunPage> {
     return Scaffold(
       backgroundColor: Color(kPrimaryColor),
       body: SafeArea(
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          // padding: EdgeInsets.only(top: 20,bottom: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              _item(
-                  kind: KindFun.movie_lines.index,
-                  title: 'Movie Lines',
-                  image: 'assets/images/joker.jpg'),
-              SizedBox(
-                height: 20,
-              ),
-              _item(
-                  kind: KindFun.movie_scripts.index,
-                  title: 'Movie Scripts',
-                  image: 'assets/images/script.png'),
-            ],
+        child: SingleChildScrollView(
+          child: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                _item(
+                    type: FunTypes.MOVIE_LINES,
+                    title: 'Movie Lines',
+                    image: 'assets/images/joker.jpg'),
+                SizedBox(
+                  height: 20,
+                ),
+                _item(
+                    type: FunTypes.MOVIE_SCRIPTS,
+                    title: 'Movie Scripts',
+                    image: 'assets/images/script.png'),
+                _item(
+                    type: FunTypes.WATCH_MOVIES,
+                    title: 'Watch Movies',
+                    image: 'assets/images/joker.jpg')
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  _item({String title, String image, Color color, int kind}) {
-    var width=MediaQuery.of(context).size.width;
-     var height=MediaQuery.of(context).size.height;
+  _item({String title, String image, Color color, FunTypes type}) {
+    var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
     return GestureDetector(
       onTap: () {
-          openFunPage(kind);
+        _navigatePage(type);
       },
       child: Container(
         alignment: Alignment.center,
@@ -67,8 +70,8 @@ class _FunPageState extends State<FunPage> {
               child: Image.asset(
                 image,
                 fit: BoxFit.fitWidth,
-                width:width*0.8,
-                height: height*0.4,
+                width: width * 0.8,
+                height: height * 0.4,
               ),
             ),
             Positioned.fill(
@@ -89,19 +92,36 @@ class _FunPageState extends State<FunPage> {
       ),
     );
   }
-  openFunPage(int kind){
-    switch(kind){
-      case 0:
-      Navigator.pushNamed(context, '/Movie Lines');
-      return;
-      case 1:
-      return;
-      case 2:
-      Navigator.pushNamed(context, '/Movie Scripts');
 
-      return;
-      case 3:
-      return;
+  _navigatePage(FunTypes type) {
+    switch (type) {
+      case FunTypes.WATCH_MOVIES:
+        Navigator.push(
+            context, MaterialPageRoute(builder: (_) => WatchMovieList()));
+        break;
+      case FunTypes.MOVIE_LINES:
+        Navigator.push(context, MaterialPageRoute(builder: (_) => LinePage()));
+        break;
+      case FunTypes.MOVIE_QUOTES:
+        // TODO: Handle this case.
+        break;
+      case FunTypes.MOVIE_SCRIPTS:
+        Navigator.push(
+            context, MaterialPageRoute(builder: (_) => MovieScript()));
+        break;
     }
+    // switch(kind){
+    //   case 0:
+    //   Navigator.pushNamed(context, '/Movie Lines');
+    //   return;
+    //   case 1:
+    //   return;
+    //   case 2:
+    //   Navigator.pushNamed(context, '/Movie Scripts');
+
+    //   return;
+    //   case 3:
+    //   return;
+    // }
   }
 }
