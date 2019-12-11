@@ -7,6 +7,7 @@ import 'package:nux_movie/src/ui/play_video_screen.dart';
 import 'package:nux_movie/src/utils/error.dart';
 import 'package:nux_movie/src/utils/utils.dart';
 import 'package:nux_movie/src/widgets/cast_list.dart';
+import 'package:nux_movie/src/widgets/custom_cached_network_image.dart';
 import 'package:nux_movie/src/widgets/custom_text.dart';
 import 'package:nux_movie/src/widgets/image_widget.dart';
 import 'package:nux_movie/src/widgets/recommendations_list.dart';
@@ -29,6 +30,7 @@ class _MovieDetailState extends State<MovieDetail> {
     bloc.fetchCasts(widget.result.id);
     bloc.fetchRecommend(widget.result.id);
     bloc.fetchTrailerMovie(widget.result.id);
+    print('movie ID: ${widget.result.id}');
   }
 
   @override
@@ -51,12 +53,10 @@ class _MovieDetailState extends State<MovieDetail> {
 
   _getBackground() {
     return Container(
-      child: CachedNetworkImage(
-        imageUrl:
-            'https://image.tmdb.org/t/p/original/${widget.result.backdropPath}',
-        fit: BoxFit.cover,
-        placeholder: (context, url) => Container(),
-        errorWidget: (context, url, error) => ErrorUtils.getErrorBackDrop(),
+      child: CustomCachedNetWorkImage(
+        photoUrl: widget.result.backdropPath,
+        pixels: 'original',
+        errorWidget: ErrorUtils.getErrorBackDrop(),
       ),
       constraints: BoxConstraints.expand(height: 300),
     );
@@ -171,20 +171,16 @@ class _MovieDetailState extends State<MovieDetail> {
                     margin: EdgeInsets.only(left: 16),
                     child: Hero(
                       tag: widget.heroTag,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
-                        child: CachedNetworkImage(
-                            imageUrl:
-                                'https://image.tmdb.org/t/p/w185/${widget.result.posterPath}',
-                            width: 88,
-                            height: 120,
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) => null,
-                            errorWidget: (context, url, error) => Container(
-                                  width: 88,
-                                  height: 120,
-                                  child: ErrorUtils.getErrorPoster(),
-                                )),
+                      child: CustomCachedNetWorkImage(
+                        borderRadius: 8,
+                        photoUrl: widget.result.posterPath,
+                        width: 88,
+                        height: 120,
+                        errorWidget: Container(
+                          width: 88,
+                          height: 120,
+                          child: ErrorUtils.getErrorPoster(),
+                        ),
                       ),
                     ),
                   ),
@@ -230,7 +226,7 @@ class _MovieDetailState extends State<MovieDetail> {
                     );
                   }
                   if (snapshot.connectionState == ConnectionState.waiting)
-                    return WaitingWidget();
+                    return Center(child: WaitingWidget());
                   return Container();
                 },
               ),
@@ -244,6 +240,7 @@ class _MovieDetailState extends State<MovieDetail> {
                   color: Color(kTextColor),
                 ),
               ),
+              SizedBox(height: 5,),
               StreamBuilder(
                 stream: bloc.recommend,
                 builder: (context, AsyncSnapshot<ItemModel> snapshot) {
@@ -255,10 +252,11 @@ class _MovieDetailState extends State<MovieDetail> {
                     );
                   }
                   if (snapshot.connectionState == ConnectionState.waiting)
-                    return WaitingWidget();
+                    return Center(child: WaitingWidget());
                   return Container();
                 },
               ),
+              SizedBox(height: 10,),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,

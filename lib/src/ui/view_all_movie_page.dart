@@ -11,6 +11,7 @@ import 'package:nux_movie/src/utils/utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:nux_movie/src/widgets/custom_cached_network_image.dart';
 import 'package:nux_movie/src/widgets/custom_text.dart';
+import 'package:nux_movie/src/widgets/item_movie_horizontal.dart';
 import 'package:nux_movie/src/widgets/waiting_widget.dart';
 
 import 'movie_detail.dart';
@@ -112,65 +113,11 @@ class _ViewAllMovieState extends State<ViewAllMovie> {
   }
 
   _item(Result result) {
-    return InkWell(
+    return ItemMovieHorizontal(
+      result: result,
       onTap: (){
-        _navigateToMovieDetailPage(result: result,heroTag: result.id.toString());
+         _navigateToMovieDetailPage(result: result,heroTag: result.id.toString());
       },
-      child: Container(
-        height: 175,
-        padding: EdgeInsets.only(left: 15, right: 15, top: 10),
-        key: Key('{$result.id}'),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            CustomCachedNetWorkImage(
-              photoUrl: result.posterPath,
-              width: MediaQuery.of(context).size.width * 0.35,
-              height: 175,
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Flexible(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  CustomText(
-                    result.title,
-                    textColor: Color(kTextColor2),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                  ),
-                  SizedBox(
-                    height: 3,
-                  ),
-                  CustomText(
-                    Utils.getGenresList(result.genreIds),
-                    fontWeight: FontWeight.w500,
-                    textColor: Color(kWhiteTextColor),
-                  ),
-                  SizedBox(
-                    height: 3,
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.star,
-                        color: Colors.yellow,
-                        size: 20,
-                      ),
-                      SizedBox(
-                        width: 3,
-                      ),
-                      Text('${result.voteAverage}')
-                    ],
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
     );
   }
 }

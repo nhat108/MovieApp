@@ -1,5 +1,3 @@
-import 'dart:async';
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:nux_movie/src/models/db.dart';
 import 'package:nux_movie/src/models/movie_lines.dart';
