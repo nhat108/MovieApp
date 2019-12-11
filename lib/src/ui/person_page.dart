@@ -9,6 +9,7 @@ import 'package:nux_movie/src/utils/error.dart';
 import 'package:nux_movie/src/utils/utils.dart';
 import 'package:nux_movie/src/widgets/biography_card.dart';
 import 'package:nux_movie/src/widgets/recommendations_list.dart';
+import 'package:nux_movie/src/widgets/waiting_widget.dart';
 import '../blocs/movies_bloc.dart';
 
 class PersonPage extends StatefulWidget {
@@ -37,7 +38,7 @@ class _PersonPageState extends State<PersonPage> {
           children: <Widget>[
             _getBackground(profilePath: widget.profilePath),
             _getContent(),
-            _getToolbar(context),
+            _getToolbar(),
           ],
         ),
       ),
@@ -74,10 +75,10 @@ class _PersonPageState extends State<PersonPage> {
     );
   }
 
-  _getToolbar(BuildContext context) {
-    return new Container(
-      margin: new EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-      child: new IconButton(
+  _getToolbar() {
+    return Container(
+      margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+      child: IconButton(
         onPressed: () {
           Navigator.pop(context);
         },
@@ -129,7 +130,7 @@ class _PersonPageState extends State<PersonPage> {
                                       height: 10,
                                     ),
                                     Text(
-                                      '${person.placeOfBirth == null ? '' : person.placeOfBirth}',
+                                      '${person.placeOfBirth??''}',
                                       textAlign: TextAlign.center,
                                       style:
                                           Theme.of(context).textTheme.subhead,
@@ -200,8 +201,7 @@ class _PersonPageState extends State<PersonPage> {
                   children: <Widget>[
                     Text(
                       'Biography',
-                      style: TextStyle(
-                          fontSize: 20, color: Color(kTextColor)),
+                      style: TextStyle(fontSize: 20, color: Color(kTextColor)),
                     ),
                     SizedBox(
                       height: 5,
@@ -215,8 +215,7 @@ class _PersonPageState extends State<PersonPage> {
                     ),
                     Text(
                       'Know For',
-                      style: TextStyle(
-                          fontSize: 20, color: Color(kTextColor)),
+                      style: TextStyle(fontSize: 20, color: Color(kTextColor)),
                     ),
                     StreamBuilder(
                       stream: bloc.personMovies,
@@ -233,9 +232,7 @@ class _PersonPageState extends State<PersonPage> {
                           );
                         } else if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return Center(
-                            child: CircularProgressIndicator(),
-                          );
+                          return Center(child: WaitingWidget());
                         }
                         return Container();
                       },
