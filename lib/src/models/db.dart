@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:nux_movie/src/models/item_movie_gd.dart';
 import 'package:nux_movie/src/models/item_video.dart';
 import 'package:nux_movie/src/models/screen_play_model.dart';
 
@@ -33,6 +34,13 @@ class DatabaseService {
        );
       _db.collection('lines').document().setData(line.toMap());    
     }
+  }
+   Stream<List<MovieGD>>getAllMovies(){
+    return _db.collection('movies').snapshots().map((i){
+       return i.documents.map((doc){
+          return MovieGD.fromJson(doc.data);
+        }).toList();
+    });
   }
 
 
