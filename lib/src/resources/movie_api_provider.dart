@@ -6,6 +6,15 @@ class MovideApiProvider {
   final _apiKey = '91bc96868c19a629d28a44b0a2786ae1';
   final _baseUrl = 'https://api.themoviedb.org/3';
 
+
+  Future<Result>getMovieDetail(String id)async{
+    final response=await http.get(_baseUrl+'/movie/$id?api_key=$_apiKey&language=en-US');
+    if(response.statusCode==200){
+      return Result.fromJson(json.decode(response.body));
+    }else{
+      throw Exception('Failed to get movie detail id: $id');
+    }
+  }
   Future<ItemModel> fetchMovieDiscover(int page) async {
     final response = await http.get(_baseUrl +
         '/discover/movie?api_key=$_apiKey&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=$page');

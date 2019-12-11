@@ -3,7 +3,7 @@ import 'movie_api_provider.dart';
 
 class Repository{
   final moviesApiProvider=MovideApiProvider();
-
+  Future<Result>getMovieDetail(String id)=>moviesApiProvider.getMovieDetail(id);
   Future<ItemModel> fetchTrendingMovies()=>moviesApiProvider.fetchMovieTreding();
   Future<ItemModel>fetchDiscoverMovies(int page)=>moviesApiProvider.fetchMovieDiscover(page);
   Future<ItemModel>fetchTopRated(int page)=>moviesApiProvider.fetchTopRated(page);
