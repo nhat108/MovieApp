@@ -2,10 +2,10 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nux_movie/src/contants/colors.dart';
+import 'package:nux_movie/src/ui/about_page.dart';
 import 'package:nux_movie/src/ui/fun_page.dart';
 import 'package:nux_movie/src/ui/movies_page.dart';
 import 'package:nux_movie/src/ui/review_page.dart';
-import 'package:nux_movie/src/ui/about_page.dart';
 import 'package:nux_movie/src/utils/nux_bottom_bar.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:nux_movie/src/widgets/offline.dart';
@@ -17,21 +17,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // StreamSubscription _connectionChangeStream;
   bool isOnline = false;
   int _selectedIndex = 0;
-  // static final _moviePage = MoviesPage(
-  //   key: PageStorageKey('Page1'),
-  // );
-  // static final _playingPage = ReviewPage(
-  //   key: PageStorageKey('Page2'),
-  // );
-  // static final _funPage = FunPage(
-  //   key: PageStorageKey('Page3'),
-  // );
-  // static final _aboutPage = AboutPage(
-  //   key: PageStorageKey('Page4'),
-  // );
+
   List<Widget> pages = List<Widget>();
 
   final PageStorageBucket bucket = PageStorageBucket();
@@ -39,10 +27,10 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-  pages.add(MoviesPage());
-  pages.add(ReviewPage());
-  pages.add(FunPage());
-  pages.add(AboutPage());
+    pages.add(MoviesPage());
+    pages.add(ReviewPage());
+    pages.add(FunPage());
+    pages.add(AboutPage());
     connection = Connectivity().onConnectivityChanged.listen((onData) {
       if (onData == ConnectivityResult.mobile ||
           onData == ConnectivityResult.wifi) {
@@ -60,6 +48,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  @override
   void dispose() {
     connection.cancel();
     bloc.disposeAll();
@@ -68,13 +61,14 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-      return Scaffold(
+    return Scaffold(
         bottomNavigationBar: _bottomNavigationBar(_selectedIndex),
-        body:isOnline? IndexedStack(
-          children: pages,
-          index: _selectedIndex,
-        ):OfflineWidget()
-      );
+        body: isOnline
+            ? IndexedStack(
+                children: pages,
+                index: _selectedIndex,
+              )
+            : OfflineWidget());
   }
 
   _bottomNavigationBar(int selectedIndex) => NuxBottomNavigationBar(
