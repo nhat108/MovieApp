@@ -7,7 +7,7 @@ final bloc = MoviesBloc();
 
 class MoviesBloc {
   final _repository = Repository();
-
+  final _moiveDetail=PublishSubject<Result>();
   final _moviesTrending = PublishSubject<ItemModel>();
   final _moviesDiscover = PublishSubject<ItemModel>();
   final _moviesTopRated = PublishSubject<ItemModel>();
@@ -21,6 +21,7 @@ class MoviesBloc {
   final _searchMovie = PublishSubject<ItemModel>();
   final _movieTrailer = PublishSubject<MovieTrailer>();
 
+  Observable<Result> get detail=> _moiveDetail.stream;
   Observable<ItemModel> get trending => _moviesTrending.stream;
   Observable<ItemModel> get discover => _moviesDiscover.stream;
   Observable<ItemModel> get topRated => _moviesTopRated.stream;
@@ -34,6 +35,17 @@ class MoviesBloc {
   Observable<ItemModel> get searchMovie => _searchMovie.stream;
   Observable<MovieTrailer> get movieTrailer => _movieTrailer.stream;
 
+  Future<Result> fetchMovieDetail(String id)async{
+    return _repository.getMovieDetail(id);
+    // _repository.getMovieDetail(id).then((onValue){
+    //   _moiveDetail.sink.add(onValue);
+      
+    // }).catchError((error){
+    //   _moiveDetail.addError(error);
+    //   throw Exception(error.toString());
+    // });
+   
+  }
   fetchTrendingMovies() async {
     if (!_moviesTrending.isClosed) {
       _repository.fetchTrendingMovies().then((onValue) {
@@ -179,6 +191,7 @@ class MoviesBloc {
   }
 
   void disposeAll() {
+    _moiveDetail.close();
     _moviesTrending.close();
     _moviesDiscover.close();
     _moviesTopRated.close();
