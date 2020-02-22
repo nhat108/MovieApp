@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nux_movie/src/blocs/movies_bloc.dart';
-import 'package:nux_movie/src/contants/colors.dart';
-import 'package:nux_movie/src/contants/enums.dart';
+import 'package:nux_movie/src/constants/colors.dart';
+import 'package:nux_movie/src/constants/enums.dart';
 import 'package:nux_movie/src/models/item_model.dart';
 import 'package:nux_movie/src/ui/search_movie_delegate.dart';
 import 'package:nux_movie/src/ui/view_all_movie_page.dart';

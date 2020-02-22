@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:nux_movie/src/models/db.dart';
 import 'package:nux_movie/src/models/screen_play_model.dart';
+import 'package:nux_movie/src/services/firebase_service.dart';
 import 'package:nux_movie/src/ui/play_video_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -11,7 +11,7 @@ class MovieScript extends StatefulWidget {
 }
 
 class _MovieScriptState extends State<MovieScript> {
-  DatabaseService db = DatabaseService();
+  FirebaseService db = FirebaseService();
 
   @override
   Widget build(BuildContext context) {

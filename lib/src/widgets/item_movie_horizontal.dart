@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nux_movie/src/contants/colors.dart';
+import 'package:nux_movie/src/constants/colors.dart';
 import 'package:nux_movie/src/models/item_model.dart';
 import 'package:nux_movie/src/utils/utils.dart';
 import 'package:nux_movie/src/widgets/custom_cached_network_image.dart';

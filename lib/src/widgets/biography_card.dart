@@ -48,7 +48,7 @@ class _BiographyCardState extends State<BiographyCard> {
                         flag ? 'show more' : 'show less',
                         style: TextStyle(color: Colors.blue),
                       ),
-                    ],
+                    ],  
                   ),
                   onTap: () {
                     setState(() {

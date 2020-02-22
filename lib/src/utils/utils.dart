@@ -3,7 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 class Utils {
   static final _apiKeyGD = 'AIzaSyCUS-SHDu3m8ABIl5panRpqOO-7uXNyoeg';
   static final _baseUrlGD = 'https://www.googleapis.com/drive/v3/files/';
-  static var genresMap = {
+  static const Map<int, String> genresOfMovieMap = {
     28: 'Action',
     12: 'Adventure',
     16: 'Animation',
@@ -26,7 +26,7 @@ class Utils {
   };
 
   static String listOfGenres(int id) {
-    String genres = genresMap[id];
+    String genres = genresOfMovieMap[id];
     if (genres != null) {
       return genres;
     } else {
@@ -62,8 +62,10 @@ class Utils {
     }
   }
 
-
   static String getLinkMovieFromGD(String id) {
     return _baseUrlGD + id + '?alt=media&key=' + _apiKeyGD;
+  }
+  static String getPhotoUrlMovie(String path,{String pixels='w185'}){
+    return 'https://image.tmdb.org/t/p/$pixels/$path';
   }
 }

@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nux_movie/src/blocs/movies_bloc.dart';
-import 'package:nux_movie/src/models/db.dart';
 import 'package:nux_movie/src/models/item_model.dart';
 import 'package:nux_movie/src/models/item_movie_gd.dart';
+import 'package:nux_movie/src/services/firebase_service.dart';
 import 'package:nux_movie/src/ui/play_video/video_player_screen.dart';
 import 'package:nux_movie/src/utils/utils.dart';
 import 'package:nux_movie/src/widgets/item_movie_horizontal.dart';
-import 'package:nux_movie/src/widgets/item_movie_vertical.dart';
 import 'package:nux_movie/src/widgets/waiting_widget.dart';
 
 class WatchMovieList extends StatefulWidget {
@@ -16,7 +15,7 @@ class WatchMovieList extends StatefulWidget {
 }
 
 class _WatchMovieListState extends State<WatchMovieList> {
-  DatabaseService _db = DatabaseService();
+  FirebaseService _db = FirebaseService();
 
   @override
   Widget build(BuildContext context) {
@@ -48,12 +47,12 @@ class _WatchMovieListState extends State<WatchMovieList> {
     );
   }
 
-  _navigateToPlayVideoPage(String id) {
+  _navigateToPlayVideoPage(String link) {
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (_) => VideoPlayerScreen(
-                  videoUrl: Utils.getLinkMovieFromGD(id),
+                  videoUrl: Utils.getLinkMovieFromGD(link),
                 )));
   }
 
@@ -68,7 +67,7 @@ class _WatchMovieListState extends State<WatchMovieList> {
             return ItemMovieHorizontal(
               result: result,
               onTap: () {
-                _navigateToPlayVideoPage(movieGD.id);
+                _navigateToPlayVideoPage(movieGD.link);
               },
             );
           }

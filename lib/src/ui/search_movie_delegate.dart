@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nux_movie/src/contants/colors.dart';
+import 'package:nux_movie/src/constants/colors.dart';
 import 'package:nux_movie/src/utils/store_search_query.dart';
 import 'package:nux_movie/src/widgets/custom_text.dart';
 import 'package:nux_movie/src/widgets/search_query_card.dart';

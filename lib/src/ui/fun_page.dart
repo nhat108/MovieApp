@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nux_movie/src/contants/colors.dart';
+import 'package:nux_movie/src/constants/colors.dart';
 import 'package:nux_movie/src/ui/line_page.dart';
 import 'package:nux_movie/src/ui/movie_scripts_page.dart';
 import 'package:nux_movie/src/ui/watch_movie_list.dart';

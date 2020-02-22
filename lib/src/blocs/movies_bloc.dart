@@ -1,5 +1,5 @@
 import 'package:nux_movie/src/models/item_model.dart';
-import 'package:nux_movie/src/resources/respository.dart';
+import 'package:nux_movie/src/services/tmdb_service.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/subjects.dart';
 
@@ -84,7 +84,7 @@ class MoviesBloc {
 
   fetchUpCommingMovie(int page) async {
     if (!_moviesUpComming.isClosed) {
-      _repository.fetchUpComming(page).then((onValue) {
+      _repository.fetchUpComing(page).then((onValue) {
         ItemModel itemModel = onValue;
         _moviesUpComming.sink.add(itemModel);
       }).catchError((onError) {

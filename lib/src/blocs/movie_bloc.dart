@@ -3,9 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:nux_movie/src/blocs/movie_event.dart';
 import 'package:nux_movie/src/blocs/movie_state.dart';
-import 'package:nux_movie/src/contants/enums.dart';
+import 'package:nux_movie/src/constants/enums.dart';
 import 'package:nux_movie/src/models/item_model.dart';
-import 'package:nux_movie/src/resources/respository.dart';
+import 'package:nux_movie/src/services/tmdb_service.dart';
 import 'package:rxdart/rxdart.dart';
 
 class MovieBloc extends Bloc<MovieEvent, MovieState> {
@@ -70,7 +70,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
         itemModel= await _repository.fetchTopRated(page);
         break;
       case TypeOfMovie.UPCOMING:
-       itemModel=await _repository.fetchUpComming(page);
+       itemModel=await _repository.fetchUpComing(page);
         break;
     }
     return itemModel;

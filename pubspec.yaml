@@ -6,8 +6,9 @@ environment:
   sdk: ">=2.2.2 <3.0.0"
 
 dependencies:
+  audioplayers: ^0.13.5
   chewie: ^0.9.7
-  
+  photo_view: ^0.9.0
   video_player: ^0.10.4+1
   shared_preferences: ^0.5.4+8
   equatable: ^0.2.0

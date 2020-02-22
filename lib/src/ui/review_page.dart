@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nux_movie/src/models/db.dart';
 import 'package:nux_movie/src/models/item_video.dart';
+import 'package:nux_movie/src/services/firebase_service.dart';
 import 'package:nux_movie/src/widgets/review_page_view.dart';
 import 'package:provider/provider.dart';
 
@@ -11,7 +11,7 @@ class ReviewPage extends StatefulWidget {
 }
 
 class _ReviewPageState extends State<ReviewPage> {
-  DatabaseService db = DatabaseService();
+  FirebaseService db = FirebaseService();
 
   @override
   void initState() {

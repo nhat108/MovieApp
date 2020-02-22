@@ -3,7 +3,7 @@ import 'dart:ui' as prefix0;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:nux_movie/src/contants/colors.dart';
+import 'package:nux_movie/src/constants/colors.dart';
 import 'package:nux_movie/src/models/item_model.dart';
 import 'package:nux_movie/src/utils/error.dart';
 import 'package:nux_movie/src/utils/utils.dart';

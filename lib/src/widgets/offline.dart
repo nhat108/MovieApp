@@ -51,7 +51,7 @@ class _OfflineWidgetState extends State<OfflineWidget> {
                     onPressed: (){
                         AppSettings.openWIFISettings();
                     },
-                    child: Text('Retry'),
+                    child: Text('Setting'),
                   )
                 ],
               ))

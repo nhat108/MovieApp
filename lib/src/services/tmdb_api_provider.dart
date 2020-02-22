@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:nux_movie/src/models/item_model.dart';
 
-class MovideApiProvider {
+class MovieApiProvider {
   final _apiKey = '91bc96868c19a629d28a44b0a2786ae1';
   final _baseUrl = 'https://api.themoviedb.org/3';
 
@@ -45,7 +45,7 @@ class MovideApiProvider {
     }
   }
 
-  Future<ItemModel> fetchUpComming(int page) async {
+  Future<ItemModel> fetchUpComing(int page) async {
     final response =
         await http.get(_baseUrl + '/movie/upcoming?api_key=$_apiKey&language=en-US&page=$page');
     if (response.statusCode == 200) {
@@ -90,6 +90,7 @@ class MovideApiProvider {
         '/movie/$id/images?api_key=$_apiKey&language=en-US&include_image_language=null');
     if (response.statusCode == 200) {
       return Images.fromJson(json.decode(response.body));
+    
     } else {
       throw Exception('Failed to load images');
     }

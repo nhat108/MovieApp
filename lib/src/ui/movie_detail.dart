@@ -1,15 +1,15 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:nux_movie/src/contants/colors.dart';
+import 'package:nux_movie/src/constants/colors.dart';
 import 'package:nux_movie/src/models/item_model.dart';
 import 'package:nux_movie/src/ui/play_video_screen.dart';
+import 'package:nux_movie/src/ui/view_photo_page.dart';
 import 'package:nux_movie/src/utils/error.dart';
 import 'package:nux_movie/src/utils/utils.dart';
+import 'package:nux_movie/src/widgets/card_photos.dart';
 import 'package:nux_movie/src/widgets/cast_list.dart';
 import 'package:nux_movie/src/widgets/custom_cached_network_image.dart';
 import 'package:nux_movie/src/widgets/custom_text.dart';
-import 'package:nux_movie/src/widgets/image_widget.dart';
 import 'package:nux_movie/src/widgets/recommendations_list.dart';
 import 'package:nux_movie/src/widgets/reviews.dart';
 import 'package:nux_movie/src/widgets/waiting_widget.dart';
@@ -27,6 +27,8 @@ class _MovieDetailState extends State<MovieDetail> {
   @override
   void initState() {
     super.initState();
+    print('movie detail was called');
+    bloc.fetchImages(widget.result.id);
     bloc.fetchCasts(widget.result.id);
     bloc.fetchRecommend(widget.result.id);
     bloc.fetchTrailerMovie(widget.result.id);
@@ -214,7 +216,9 @@ class _MovieDetailState extends State<MovieDetail> {
                 'Cast',
                 style: TextStyle(fontSize: 20, color: Color(kTextColor)),
               ),
-              SizedBox(height:5 ,),
+              SizedBox(
+                height: 5,
+              ),
               StreamBuilder(
                 stream: bloc.casts,
                 builder: (context, AsyncSnapshot<Credits> snapshot) {
@@ -240,13 +244,15 @@ class _MovieDetailState extends State<MovieDetail> {
                   color: Color(kTextColor),
                 ),
               ),
-              SizedBox(height: 5,),
+              SizedBox(
+                height: 5,
+              ),
               StreamBuilder(
                 stream: bloc.recommend,
                 builder: (context, AsyncSnapshot<ItemModel> snapshot) {
                   if (snapshot.hasData) {
-                    var resutls=snapshot.data.results;
-                    if(resutls.isEmpty) return _buildRecommendEmpty();
+                    var resutls = snapshot.data.results;
+                    if (resutls.isEmpty) return _buildRecommendEmpty();
                     return RecommendationsList(
                       results: snapshot.data.results,
                     );
@@ -256,7 +262,33 @@ class _MovieDetailState extends State<MovieDetail> {
                   return Container();
                 },
               ),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
+              CustomText(
+                'Photos',
+                fontSize: 20,
+                textColor: Color(kTextColor),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              StreamBuilder<Images>(
+                stream: bloc.images,
+                builder: (_, snapshot) {
+                  if (snapshot.hasData) {
+                    var photos =
+                        snapshot.data.backdrops + snapshot.data.posters;
+                    return CardPhotos(
+                      photos: photos,
+                      onPhotoTap: (index) {
+                        _navigateToViewPhotoPage(photos, index);
+                      },
+                    );
+                  }
+                  return Container();
+                },
+              ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -297,46 +329,6 @@ class _MovieDetailState extends State<MovieDetail> {
                       ),
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                        color: Color(0xFF565f75),
-                        borderRadius: BorderRadius.circular(10.0)),
-                    alignment: Alignment.center,
-                    child: SizedBox(
-                      width: 200,
-                      child: IconButton(
-                        alignment: Alignment.center,
-                        onPressed: () {
-                          showModalBottomSheet(
-                              isScrollControlled: true,
-                              elevation: 10,
-                              context: context,
-                              backgroundColor: Colors.transparent,
-                              builder: (context) {
-                                return ImagesMovie(id: widget.result.id);
-                              });
-                        },
-                        iconSize: 30,
-                        icon: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              'Photos',
-                              style: TextStyle(
-                                fontSize: 20,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            Icon(Icons.image),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
                 ],
               ),
               SizedBox(
@@ -354,11 +346,16 @@ class _MovieDetailState extends State<MovieDetail> {
       child: CustomText("We don't have any cast added to this movie."),
     );
   }
-  _buildRecommendEmpty(){
+
+  _buildRecommendEmpty() {
     return Container(
-      child: CustomText("We don't have enough data to suggest any movies based on ${widget.result.title}.",maxLines: 2,),
+      child: CustomText(
+        "We don't have enough data to suggest any movies based on ${widget.result.title}.",
+        maxLines: 2,
+      ),
     );
   }
+
   _buildTrailerButton() => StreamBuilder<MovieTrailer>(
         stream: bloc.movieTrailer,
         builder: (context, snapshot) {
@@ -418,5 +415,17 @@ class _MovieDetailState extends State<MovieDetail> {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return PlayVideoScreen(path: path);
     }));
+  }
+
+  _navigateToViewPhotoPage(List<Poster> photos, int index) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => ViewPhotoPage(
+          photos: photos,
+          index: index,
+        ),
+      ),
+    );
   }
 }

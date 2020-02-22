@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nux_movie/src/models/db.dart';
 import 'package:nux_movie/src/models/movie_lines.dart';
+import 'package:nux_movie/src/services/firebase_service.dart';
 import 'package:provider/provider.dart';
 
 class LinePage extends StatefulWidget {
@@ -9,7 +9,7 @@ class LinePage extends StatefulWidget {
 }
 
 class _LinePageState extends State<LinePage> {
-  DatabaseService db = DatabaseService();
+  FirebaseService db = FirebaseService();
   @override
   void initState() {
     super.initState();

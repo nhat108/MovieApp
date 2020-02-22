@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:nux_movie/src/models/item_video.dart';
@@ -16,32 +17,44 @@ class ReviewPageView extends StatefulWidget {
 
 class _ReviewPageViewState extends State<ReviewPageView> {
   var currentPage = 0;
-  PageController _pageController;
+  PageController _pageController =
+      PageController(initialPage: 0, keepPage: false, viewportFraction: 0.8);
+  AudioPlayer _audioPlayer = AudioPlayer();
+  List<Video> videos;
+  var width;
+  var height;
   @override
   void initState() {
     super.initState();
-    _pageController =
-        PageController(initialPage: 0, keepPage: false, viewportFraction: 0.8);
-    _pageController.addListener(() {
-      if (_pageController.page == _pageController.page.toInt()) {
-        setState(() {
-          currentPage = _pageController.page.toInt();
-        });
-      }
-    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    this.videos = Provider.of<List<Video>>(context);
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
+    playSoundTrack(0);
+    super.didChangeDependencies();
   }
 
   @override
   void dispose() {
     _pageController.dispose();
+    _audioPlayer.dispose();
     super.dispose();
+  }
+  @override
+  void deactivate(){
+    print('deactivate was called');
+    super.deactivate();
+
+  }
+  Future<int> playSoundTrack(int index) async {
+    return _audioPlayer.play(videos[index].soundtrack);
   }
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
-    var height = MediaQuery.of(context).size.height;
-    var videos = Provider.of<List<Video>>(context);
     if (videos == null)
       return Center(
         child: CircularProgressIndicator(),
@@ -58,7 +71,6 @@ class _ReviewPageViewState extends State<ReviewPageView> {
                     imageUrl: videos[currentPage].image,
                     width: width,
                     height: height,
-                    // placeholder: (context, url) => Container(),
                     errorWidget: (context, url, error) => Container(
                       width: width,
                       height: height,
@@ -76,7 +88,6 @@ class _ReviewPageViewState extends State<ReviewPageView> {
               ],
             ),
           ),
-          
           Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -101,6 +112,12 @@ class _ReviewPageViewState extends State<ReviewPageView> {
                   itemCount: videos.length,
                   controller: _pageController,
                   pageSnapping: true,
+                  onPageChanged: (value) {
+                    setState(() {
+                      currentPage = value;
+                    });
+                    playSoundTrack(value);
+                  },
                   physics: ClampingScrollPhysics(),
                 ),
               ),

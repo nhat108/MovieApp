@@ -8,10 +8,12 @@ class Video{
   String description;
   String color;
   String website;
-  Video({this.url,this.thumnail,this.title,this.image,this.color,this.description,this.website});
+  String soundtrack;
+  Video({this.url,this.soundtrack,this.thumnail,this.title,this.image,this.color,this.description,this.website});
   factory Video.fromFireStore(DocumentSnapshot doc){
     Map map=doc.data;
     return Video(
+      soundtrack: map['soundtrack'],
       url: map['url'],
       thumnail: map['thumnail'],
       title: map['title'],

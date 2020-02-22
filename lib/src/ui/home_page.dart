@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:nux_movie/src/contants/colors.dart';
+import 'package:nux_movie/src/constants/colors.dart';
 import 'package:nux_movie/src/ui/about_page.dart';
 import 'package:nux_movie/src/ui/fun_page.dart';
 import 'package:nux_movie/src/ui/movies_page.dart';
 import 'package:nux_movie/src/ui/review_page.dart';
-import 'package:nux_movie/src/utils/nux_bottom_bar.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:nux_movie/src/widgets/nux_bottom_bar.dart';
 import 'package:nux_movie/src/widgets/offline.dart';
 import '../blocs/movies_bloc.dart';
 
@@ -22,7 +22,6 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> pages = List<Widget>();
 
-  final PageStorageBucket bucket = PageStorageBucket();
   StreamSubscription connection;
   @override
   void initState() {
@@ -47,10 +46,6 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
 
   @override
   void dispose() {
@@ -73,6 +68,7 @@ class _HomePageState extends State<HomePage> {
 
   _bottomNavigationBar(int selectedIndex) => NuxBottomNavigationBar(
         selectedIndex: _selectedIndex,
+        animationDuration: Duration(milliseconds: 200),
         showElevation: true,
         onItemSelected: (index) {
           setState(() {

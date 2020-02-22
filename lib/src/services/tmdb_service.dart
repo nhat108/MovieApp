@@ -1,13 +1,13 @@
 import 'package:nux_movie/src/models/item_model.dart';
-import 'movie_api_provider.dart';
+import 'tmdb_api_provider.dart';
 
 class Repository{
-  final moviesApiProvider=MovideApiProvider();
+  final moviesApiProvider=MovieApiProvider();
   Future<Result>getMovieDetail(String id)=>moviesApiProvider.getMovieDetail(id);
   Future<ItemModel> fetchTrendingMovies()=>moviesApiProvider.fetchMovieTreding();
   Future<ItemModel>fetchDiscoverMovies(int page)=>moviesApiProvider.fetchMovieDiscover(page);
   Future<ItemModel>fetchTopRated(int page)=>moviesApiProvider.fetchTopRated(page);
-  Future<ItemModel>fetchUpComming(int page)=>moviesApiProvider.fetchUpComming(page);
+  Future<ItemModel>fetchUpComing(int page)=>moviesApiProvider.fetchUpComing(page);
   Future<Credits>fetchCast(int id)=>moviesApiProvider.fetchCast(id);
   Future<ItemModel>fetchRecommend(int id)=>moviesApiProvider.fetchRecommendations(id);
   Future<ReviewList>fetchReviews(int id)=>moviesApiProvider.fetchReviews(id);

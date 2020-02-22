@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:nux_movie/src/utils/utils.dart';
 
 class CustomCachedNetWorkImage extends StatelessWidget {
   final String pixels;
@@ -14,7 +15,7 @@ class CustomCachedNetWorkImage extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(borderRadius),
       child: CachedNetworkImage(
-        imageUrl: 'https://image.tmdb.org/t/p/$pixels/$photoUrl',
+        imageUrl: Utils.getPhotoUrlMovie(photoUrl,pixels: pixels),
         width: width,
         height: height,
         fit: BoxFit.cover,

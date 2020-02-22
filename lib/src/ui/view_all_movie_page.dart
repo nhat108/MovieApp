@@ -4,13 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nux_movie/src/blocs/movie_bloc.dart';
 import 'package:nux_movie/src/blocs/movie_event.dart';
 import 'package:nux_movie/src/blocs/movie_state.dart';
-import 'package:nux_movie/src/contants/colors.dart';
-import 'package:nux_movie/src/contants/enums.dart';
+import 'package:nux_movie/src/constants/colors.dart';
+import 'package:nux_movie/src/constants/enums.dart';
 import 'package:nux_movie/src/models/item_model.dart';
-import 'package:nux_movie/src/utils/utils.dart';
 import 'package:http/http.dart' as http;
-import 'package:nux_movie/src/widgets/custom_cached_network_image.dart';
-import 'package:nux_movie/src/widgets/custom_text.dart';
 import 'package:nux_movie/src/widgets/item_movie_horizontal.dart';
 import 'package:nux_movie/src/widgets/waiting_widget.dart';
 
@@ -49,7 +46,9 @@ class _ViewAllMovieState extends State<ViewAllMovie> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: CupertinoPageScaffold(
+          backgroundColor: Color(kPrimaryColor),
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: Color(kPrimaryDarkColor).withOpacity(0.5),
         middle: Text(widget.title),
       ),
       child: BlocBuilder(

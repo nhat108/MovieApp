@@ -1,6 +1,7 @@
 import 'package:chewie/chewie.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:video_player/video_player.dart';
 
@@ -16,16 +17,47 @@ class VideoPlayerScreen extends StatefulWidget {
 class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   VideoPlayerController _videoPlayerController;
   ChewieController _chewieController;
+  double _aspectRatio = 16 / 9;
   @override
   initState() {
     super.initState();
+    print(widget.videoUrl);
     _videoPlayerController = VideoPlayerController.network(widget.videoUrl);
+    _chewieController = ChewieController(
+      allowedScreenSleep: false,
+      allowFullScreen: true,
+      deviceOrientationsAfterFullScreen: [
+        DeviceOrientation.landscapeRight,
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ],
+      videoPlayerController: _videoPlayerController,
+      aspectRatio: _aspectRatio,
+      autoInitialize: true,
+      autoPlay: true,
+      showControls: true,
+    );
+    _chewieController.addListener(() {
+      if (_chewieController.isFullScreen) {
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.landscapeRight,
+          DeviceOrientation.landscapeLeft,
+        ]);
+      }
+    });
   }
 
   @override
   void dispose() {
     _videoPlayerController.dispose();
     _chewieController.dispose();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     super.dispose();
   }
 
@@ -34,23 +66,11 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          child: FutureBuilder(
-            future: _videoPlayerController.initialize(),
-            builder: (_, __) {
-              _chewieController = ChewieController(
-                videoPlayerController: _videoPlayerController,
-                aspectRatio: _videoPlayerController.value.aspectRatio,
-                autoPlay: true,
-                showControls: true,
-              );
-              return Chewie(
-                controller: _chewieController,
-              );
-            },
+          child: Chewie(
+            controller: _chewieController,
           ),
         ),
       ),
     );
   }
 }
-
